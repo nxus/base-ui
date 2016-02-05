@@ -1,0 +1,32 @@
+{
+  "name": "@nxus/base-ui",
+  "version": "2.0.0",
+  "description": "Basic UI pages for Nxus apps, like 404 and 500 pages",
+  "main": "lib",
+  "scripts": {
+    "test": "NODE_ENV=test mocha --compilers js:babel/register -R spec",
+    "compile": "babel --optional runtime -d lib/ src/",
+    "prepublish": "npm run compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nxus/base-ui.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nxus/base-ui/issues"
+  },
+  "homepage": "https://github.com/nxus/base-ui",
+  "dependencies": {
+    "babel-runtime": "^5.7.0"
+  },
+  "peerDependencies": {
+    "@nxus/core": "^2.2.0"
+  },
+  "devDependencies": {
+    "babel": "^5.6.23",
+    "mocha": "^2.2.5",
+    "should": "^7.0.2"
+  }
+}
