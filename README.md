@@ -21,10 +21,10 @@ If you want to provide your own 404 or 500 page, define the relevant new templat
 
 ### 404 Page Template
 ```
-app.get('templater').provide('template', '404', 'ejs', 'path/to/my/404template.ejs')
+app.get('templater').template('404', 'ejs', 'path/to/my/404template.ejs')
 ```
 
 ### 500 Page Template
 ```
-app.get('templater').provide('template', '500', 'ejs', 'path/to/my/500template.ejs')
+app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
 ```
