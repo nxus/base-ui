@@ -1,4 +1,7 @@
 # @nxus/base-ui
+
+[![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
+
 Base UI pages including 404 and error page handlers.
 
 ## Installation
