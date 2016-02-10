@@ -19,12 +19,12 @@ The module registers two handlers:
 ## Customizing
 If you want to provide your own 404 or 500 page, define the relevant new template. Base-ui will use these to handle the routes above.
 
-### 400
+### 404 Page Template
 ```
-app.get('templater').provide('template', '404', 'ejs', 'path/to/my/404template.ejs')
+app.get('templater').template('404', 'ejs', 'path/to/my/404template.ejs')
 ```
 
-### 500
+### 500 Page Template
 ```
-app.get('templater').provide('template', '500', 'ejs', 'path/to/my/500template.ejs')
+app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
 ```
