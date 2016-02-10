@@ -22,5 +22,10 @@ export default class Module {
     app.get('router').route("GET", '/error', (req, res) => {
       return app.get('templater').render('500', {req, user: req.user}).then(res.send.bind(res))
     })
+
+    app.get('router').provideAfter('route', 'GET', '/', function(req, res) {
+      let content = "<h1>Welcome to Nxus!</h1>"
+      return app.get('templater').render('default', { req: req, user: req.user, content}).then(res.send.bind(res));
+    })
   }
 } 
