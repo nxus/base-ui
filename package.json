@@ -23,7 +23,8 @@
   },
   "peerDependencies": {
     "@nxus/core": "^2.3.0",
-    "@nxus/templater": "^2.3.0"
+    "@nxus/templater": "^2.3.0",
+    "@nxus/router": "^2.3.0"
   },
   "devDependencies": {
     "@nxus/core": "^2.3.0",
