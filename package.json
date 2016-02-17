@@ -22,15 +22,20 @@
   },
   "homepage": "https://github.com/nxus/base-ui",
   "dependencies": {
-    "babel-runtime": "^5.7.0"
+    "babel-runtime": "^5.7.0",
+    "morph": "^0.2.0",
+    "pluralize": "^1.2.1",
+    "underscore": "^1.7.0"
   },
   "peerDependencies": {
-    "@nxus/core": "^2.3.0",
+    "@nxus/core": "^2.3.6",
+    "@nxus/renderer": "^2.3.0",
     "@nxus/templater": "^2.3.0",
-    "@nxus/router": "^2.3.2"
+    "@nxus/router": "^2.3.0",
+    "@nxus/storage": "^2.3.0"
   },
   "devDependencies": {
-    "@nxus/core": "^2.3.0",
+    "@nxus/core": "^2.3.6",
     "babel": "^5.6.23",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.1.0",

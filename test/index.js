@@ -25,5 +25,8 @@ describe("BaseUI", () => {
     it("should be instantiated", () => {
       baseui.should.not.be.null;
     });
+    it("should have an error page", () => {
+      app.get('router').provide.calledWith('GET', '/error');
+    });
   });
 });

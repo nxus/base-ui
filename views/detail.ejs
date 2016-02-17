@@ -1,0 +1,11 @@
+<div>
+  <h2><%= inst[instanceTitleField] %></h2>
+  <% attributes.forEach(function(attr) { %>
+    <% attr.value = inst[attr.name] %>
+    <div>
+      <span><%=attr.name%></span><span><%=attr.value%></span>
+    </div>
+  <% }) %>
+</div>
+<div>
+
