@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-02-09
+* @Last Modified 2016-02-17
 */
 
 'use strict';
@@ -23,7 +23,7 @@ export default class Module {
       return app.get('templater').render('500', {req, user: req.user}).then(res.send.bind(res))
     })
 
-    app.get('router').provideAfter('route', 'GET', '/', function(req, res) {
+    app.get('router').provideBefore('route', 'GET', '/', function(req, res) {
       let content = "<h1>Welcome to Nxus!</h1>"
       return app.get('templater').render('default', { req: req, user: req.user, content}).then(res.send.bind(res));
     })
