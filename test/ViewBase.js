@@ -42,12 +42,14 @@ describe("ViewBase", () => {
     });
     
     it("should have routes", () => {
-      app.get('router').provide.calledWith('get', '/test').should.be.true;
-      app.get('router').provide.calledWith('get', '/test/:id').should.be.true;
+      app.get('router').provide.calledWith('route', 'get', '/test').should.be.true;
+      app.get('router').provide.calledWith('route', 'get', '/test/:id').should.be.true;
     })
+    
     it("should have a template prefix", () => {
       module.templatePrefix().should.equal('view-test-model');
     })
+    
     it("should have an titleField", () => {
       module.titleField().should.equal('name');
     })
