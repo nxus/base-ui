@@ -38,7 +38,7 @@ export default class ViewBase extends HasModels {
 
     this.app.log.debug('registering template', this.templatePrefix()+'-list')
     this.templater.template(this.templatePrefix()+'-list', 'ejs', __dirname+"/../views/list.ejs")
-    this.templater.template(this.templatePrefix()+'-form', 'ejs', __dirname+"/../views/form.ejs")
+    this.templater.template(this.templatePrefix()+'-detail', 'ejs', __dirname+"/../views/detail.ejs")
   }
 
   /**
@@ -118,7 +118,7 @@ export default class ViewBase extends HasModels {
       find = find.populate(...this.populate)
     }
     return find.then((insts) => {
-      return this.templater.render(this.templatePrefix()+'-list', {
+      return this.templater.renderPartial(this.templatePrefix()+'-list', 'page', {
         req,
         base: this.base(),
         user: req.user,
@@ -127,8 +127,8 @@ export default class ViewBase extends HasModels {
         insts,
         name: this.displayName(),
         attributes: this._getAttrs(this.models.model)
-      });
-    }).catch((e) => {console.log('caught on find', e)})
+      }).then(res.send.bind(res));
+    }).catch((e) => {console.log('caught', e)})
   }
 
   detail (req, res) {
@@ -137,16 +137,15 @@ export default class ViewBase extends HasModels {
       find = find.populate(...this.populate)
     }
     return find.then((inst) => {
-      return this.templater.render(this.templatePrefix()+'-detail', {
+      return this.templater.renderPartial(this.templatePrefix()+'-detail', 'page', {
         req,
         base: this.base(),
         user: req.user,
-        title: 'View '+ this.displayName(),
-        instanceTitleField: this.titleField(),
+        title: 'View '+ this.displayName() + ": "+inst[this.titleField()],
         inst,
         name: this.displayName(),
         attributes: this._getAttrs(this.models.model)
-      })
+      }).then(res.send.bind(res));
     })
   }
 

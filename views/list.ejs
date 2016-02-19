@@ -12,8 +12,8 @@
           <% attributes.forEach(function(attr) { %>
             <% if(attr.name == instanceTitleField) { %>
               <td><a href="<%=base%>/<%=u.id%>"><%=u[attr.name]%></a></td>
-            <% } else if(attr.type == 'password') { return } %>
-            <% else if(attr.type == 'boolean') { %>
+            <% } else if (attr.type == 'password') { %> <% return %>
+            <% } else if (attr.type == 'boolean') { %>
             <td><%- u[attr.name] ? '<i class="fa fa-check"></i>' : '' %></td>
             <% } else { %>
             <td><%= u[attr.name] %></td>

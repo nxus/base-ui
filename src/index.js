@@ -1,12 +1,14 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-02-17
+* @Last Modified 2016-02-18
 */
 
 'use strict';
 
 import ViewBaseClass from './viewBase'
+import _ from 'underscore'
+import path from 'path'
 
 export var ViewBase = ViewBaseClass
 
@@ -14,7 +16,7 @@ export default class BaseUI {
   constructor(app) {
     this.app = app
     this.app.get('base-ui').use(this)
-      .gather('modelView')
+      .gather('viewModel')
 
     this._setupErrorRoutes()
     this._setupHomePageDefault()
@@ -45,7 +47,7 @@ export default class BaseUI {
    * @param  {string|class} model Can either be a model name, a path to a file or an ViewBase Subclass.
    * @param  {Object} opts  An options hash, wich is used to configure the UI.
    */
-  modelView(model, opts) {
+  viewModel(model, opts) {
     var viewModel;
     if(_.isString(model) && model.indexOf(path.sep) == -1) {
       this.app.log.debug('Loading view model', model)
