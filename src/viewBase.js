@@ -36,9 +36,8 @@ export default class ViewBase extends HasModels {
     this.router.route('get', this.base(), this.list.bind(this))
     this.router.route('get', this.base()+'/:id', this.detail.bind(this))
 
-    this.app.log.debug('registering template', this.templatePrefix()+'-list')
-    this.templater.template(this.templatePrefix()+'-list', 'ejs', __dirname+"/../views/list.ejs")
-    this.templater.template(this.templatePrefix()+'-detail', 'ejs', __dirname+"/../views/detail.ejs")
+    this.templater.provideBefore('template', this.templatePrefix()+'-list', 'ejs', __dirname+"/../views/list.ejs")
+    this.templater.provideBefore('template', this.templatePrefix()+'-detail', 'ejs', __dirname+"/../views/detail.ejs")
   }
 
   /**
@@ -108,17 +107,17 @@ export default class ViewBase extends HasModels {
 
   model_names () {
     let ret = {}
-    ret[this.model()] = 'model'
+    ret[this.model()] = this.model()
     return ret;
   }
   
-  list (req, res) {
-    let find = this.models.model.find().where({})
+  list (req, res, opts = {}) {
+    let find = this.models[this.model()].find().where({})
     if (this.populate) {
       find = find.populate(...this.populate)
     }
     return find.then((insts) => {
-      return this.templater.renderPartial(this.templatePrefix()+'-list', 'page', {
+      opts = _.extend({
         req,
         base: this.base(),
         user: req.user,
@@ -126,26 +125,32 @@ export default class ViewBase extends HasModels {
         instanceTitleField: this.titleField(),
         insts,
         name: this.displayName(),
-        attributes: this._getAttrs(this.models.model)
-      }).then(res.send.bind(res));
+        attributes: this._getAttrs(this.models[this.model()])
+      }, opts)
+      if(!opts[pluralize(this.model())]) opts[pluralize(this.model())] = insts
+      else opts.insts = opts[pluralize(this.model())]
+      return this.templater.renderPartial(this.templatePrefix()+'-list', 'page', opts).then(res.send.bind(res));
     }).catch((e) => {console.log('caught', e)})
   }
 
-  detail (req, res) {
-    let find = this.models.model.findOne().where(req.params.id)
+  detail (req, res, opts = {}) {
+    let find = this.models[this.model()].findOne().where(req.params.id)
     if (this.populate) {
       find = find.populate(...this.populate)
     }
     return find.then((inst) => {
-      return this.templater.renderPartial(this.templatePrefix()+'-detail', 'page', {
+      opts = _.extend({
         req,
         base: this.base(),
         user: req.user,
         title: 'View '+ this.displayName() + ": "+inst[this.titleField()],
         inst,
         name: this.displayName(),
-        attributes: this._getAttrs(this.models.model)
-      }).then(res.send.bind(res));
+        attributes: this._getAttrs(this.models[this.model()])
+      }, opts)
+      if(!opts[this.model()]) opts[this.model()] = inst;
+      else opts.inst = opts[this.model()]
+      return this.templater.renderPartial(this.templatePrefix()+'-detail', 'page', opts).then(res.send.bind(res));
     })
   }
 
