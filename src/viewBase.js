@@ -42,12 +42,20 @@ export default class ViewBase extends HasModels {
 
   /**
    * Fields in the model to ignore in the UI
-   * @return {string}
+   * @return {array}
    */
   ignore() {
     return this.opts.ignore || ['id', 'createdAt', 'updatedAt']
   }
   
+  /**
+   * Fields in the model to show
+   * @return {array}
+   */
+  display() {
+    return this.opts.display || []
+  }
+
   /**
    * Fields in the model to use for the instance title
    * @return {string}
@@ -139,6 +147,7 @@ export default class ViewBase extends HasModels {
       find = find.populate(...this.modelPopulate())
     }
     return find.then((inst) => {
+      if(!inst) return res.status(404).send()
       opts = _.extend({
         req,
         base: this.base(),
@@ -156,10 +165,17 @@ export default class ViewBase extends HasModels {
 
   _getAttrs(model) {
     let ignore = this.ignore()
+    let display = this.display()
     let ignoreType = ['objectId']
     return _(model._attributes)
     .keys()
     .map((k) => {let ret = model._attributes[k]; ret.name = k; if(!ret.label) ret.label = this._sanitizeName(k); return ret})
+    .filter((k) => {
+      if(display.length > 0)
+        return _(display).contains(k.name)
+      else
+        return true
+    })
     .filter((k) => {
       let ret = _(ignore).contains(k.name) 
       if(!ret) ret = _(ignoreType).contains(k.type)

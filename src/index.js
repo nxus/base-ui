@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-02-24
+* @Last Modified 2016-02-25
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -75,6 +75,10 @@ export default class BaseUI {
     this.app = app
     this.app.get('base-ui').use(this)
       .gather('viewModel')
+      .respond('getViewModel')
+      .respond('getViewModels')
+
+    this.models = {}
 
     this._setupErrorRoutes()
     this._setupHomePageDefault()
@@ -111,17 +115,39 @@ export default class BaseUI {
       this.app.log.debug('Loading view model', model)
       opts.model = model
       viewModel = new ViewBase(this.app, opts)
+      console.log('viewmodel name', viewModel.model())
+      this.models[model] = viewModel
     } else if(_.isString(model) && model.indexOf(path.sep) > -1) {
       if(fs.existsSync(model)) {
         this.app.log.debug('Loading view model file at', model)
         model = require(model);
-        viewModel = new model(this.app)
+        viewModel = new model(this.app);
+        console.log('viewmodel name', viewModel.model())
+        this.models[viewModel.model()] = viewModel
       } else
         throw new Error('Class path '+model+' is not a valid file')
     } else if(_.isFunction(model)) {
       viewModel = new model(this.app)
+      console.log('viewmodel name', viewModel.model())
+      this.models[viewModel.model()] = viewModel
     }
-    
+  }
+
+  /**
+   * Returns a viewModel, if it has been regsitered
+   * @param  {string} model the name of the model to return
+   * @return {ViewBase}       An instance of the viewModel
+   */
+  getViewModel(model) {
+    return this.models[model] ? this.models[model] : null
+  }
+
+  /**
+   * Returns all the registered viewModel instances
+   * @return {array} An array of the viewModel/viewBase instances.
+   */
+  getViewModels() {
+    return this.models
   }
 
   _setupErrorRoutes() {
