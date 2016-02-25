@@ -28,7 +28,7 @@
     "underscore": "^1.7.0"
   },
   "peerDependencies": {
-    "@nxus/core": "^2.3.6",
+    "@nxus/core": "^2.4.0-0",
     "@nxus/renderer": "^2.3.0",
     "@nxus/templater": "^2.3.0",
     "@nxus/router": "^2.3.0",
