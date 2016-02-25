@@ -1,6 +1,6 @@
 {
   "name": "@nxus/base-ui",
-  "version": "2.4.0-0",
+  "version": "2.5.0-0",
   "description": "Basic UI pages for Nxus apps, like 404 and 500 pages",
   "main": "lib",
   "scripts": {
