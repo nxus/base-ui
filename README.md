@@ -83,6 +83,12 @@ The base url for the UI pages.
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Defaults to `/<models>`
 
+### display
+
+Fields in the model to show
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
 ### displayName
 
 The display name for the model to use in the  UI
@@ -93,7 +99,7 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 Fields in the model to ignore in the UI
 
-Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
 
 ### model
 
@@ -128,6 +134,22 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 ## BaseUI
 
 The base-ui module class.
+
+### getViewModel
+
+Returns a viewModel, if it has been regsitered
+
+**Parameters**
+
+-   `model` **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the name of the model to return
+
+Returns **ViewBase** An instance of the viewModel
+
+### getViewModels
+
+Returns all the registered viewModel instances
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** An array of the viewModel/viewBase instances.
 
 ### viewModel
 
