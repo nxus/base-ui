@@ -21,7 +21,7 @@ The module registers two handlers:
 
 The module provides a helper for generating list/detail views from a model:
 
-    app.get('base-ui').modelView('user', {base: '/users', titleField: 'email'})
+    app.get('base-ui').viewModel('user', {base: '/users', titleField: 'email'})
 
 You may pass in an options object, as in this example, or subclass of ViewBase, or a string path to a subclass of ViewBase.
 
@@ -39,7 +39,7 @@ You may pass in an options object, as in this example, or subclass of ViewBase, 
       }
     }
 
-    app.get('base-ui').modelView(UserView)
+    app.get('base-ui').viewModel(UserView)
 
 ### Customizing
 
@@ -101,7 +101,7 @@ Define the primary model for this view module
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-### model\_populate
+### modelPopulate
 
 Define any populated relationships for the model
 
@@ -125,7 +125,11 @@ Fields in the model to use for the instance title
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
-## viewModel
+## BaseUI
+
+The base-ui module class.
+
+### viewModel
 
 Creates a List and Detail UI for the specified model, including all routes and views.  You can pass in the following combinations:
 
