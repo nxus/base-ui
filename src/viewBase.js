@@ -101,11 +101,11 @@ export default class ViewBase extends HasModels {
    * Define any populated relationships for the model
    * @return {array} 
    */
-  model_populate () {
-    return this.opts.modelPopulate
+  modelPopulate () {
+    return this.opts.modelPopulate || []
   }
 
-  model_names () {
+  modelNames () {
     let ret = {}
     ret[this.model()] = this.model()
     return ret;
@@ -113,8 +113,8 @@ export default class ViewBase extends HasModels {
   
   list (req, res, opts = {}) {
     let find = this.models[this.model()].find().where({})
-    if (this.populate) {
-      find = find.populate(...this.populate)
+    if (this.modelPopulate && this.modelPopulate().length > 0) {
+      find = find.populate(...this.modelPopulate())
     }
     return find.then((insts) => {
       opts = _.extend({
@@ -135,15 +135,15 @@ export default class ViewBase extends HasModels {
 
   detail (req, res, opts = {}) {
     let find = this.models[this.model()].findOne().where(req.params.id)
-    if (this.populate) {
-      find = find.populate(...this.populate)
+    if (this.modelPopulate && this.modelPopulate().length > 0) {
+      find = find.populate(...this.modelPopulate())
     }
     return find.then((inst) => {
       opts = _.extend({
         req,
         base: this.base(),
         user: req.user,
-        title: 'View '+ this.displayName() + ": "+inst[this.titleField()],
+        title: inst[this.titleField()],
         inst,
         name: this.displayName(),
         attributes: this._getAttrs(this.models[this.model()])

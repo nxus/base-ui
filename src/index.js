@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-02-20
+* @Last Modified 2016-02-24
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -23,7 +23,7 @@
  * 
  * The module provides a helper for generating list/detail views from a model:
  * 
- *     app.get('base-ui').modelView('user', {base: '/users', titleField: 'email'})
+ *     app.get('base-ui').viewModel('user', {base: '/users', titleField: 'email'})
  * 
  * You may pass in an options object, as in this example, or subclass of ViewBase, or a string path to a subclass of ViewBase.
  * 
@@ -41,7 +41,7 @@
  *       }
  *     }
  * 
- *     app.get('base-ui').modelView(UserView)
+ *     app.get('base-ui').viewModel(UserView)
  * 
  * ## Customizing
  * 
@@ -67,6 +67,9 @@ import path from 'path'
 
 export var ViewBase = ViewBaseClass
 
+/**
+ * The base-ui module class.
+ */
 export default class BaseUI {
   constructor(app) {
     this.app = app
