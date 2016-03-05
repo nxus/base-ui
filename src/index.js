@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-02-25
+* @Last Modified 2016-03-05
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -54,6 +54,26 @@
  * ### 500 Page Template
  * 
  *     app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
+ * 
+ * ### List and Detail View
+ *
+ * You can specify your own list view template to use instead of the default. The base-ui module looks for a template matching the following 
+ * pattern: `view-<model>-list` and `view-<model>-detail`.
+ *
+ * Each template will be passed either a model instance (for detail view) or an array of models (for list view), using the model name.
+ *
+ * So using the examples above:
+ *
+ * ```
+ * app.get('templater').template('view-user-list', 'ejs', () => {
+ *   return "<% users.forEach(function(user){ .... }) %>"
+ * })
+ * 
+ * app.get('templater').template('view-user-detail', 'ejs', () => {
+ *   return "<%= user.email %>"
+ * })
+ * ```
+ * 
  * 
  * ## API
  * --------
@@ -169,7 +189,7 @@ export default class BaseUI {
   }
 
   _setupHomePageDefault() {
-    this.app.get('router').provideBefore('route', 'GET', '/', (req, res) => {
+    this.app.get('router').default().route('GET', '/', (req, res) => {
       let content = "<h1>Welcome to Nxus!</h1>"
       return this.app.get('templater').render('default', { req: req, user: req.user, content}).then(res.send.bind(res));
     })
