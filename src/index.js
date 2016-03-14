@@ -172,7 +172,7 @@ export default class BaseUI {
 
   _setupErrorRoutes() {
     var app = this.app
-    app.onceAfter('startup', () => {
+    app.once('launch', () => {
       app.get('router').getExpressApp().then((expressApp) => {
         expressApp.use(function notFoundHandler(req, res, next) {
           app.get('templater').render('404', {req, user: req.user}).then((body) => {
