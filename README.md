@@ -53,6 +53,23 @@ If you want to provide your own 404 or 500 page, define the relevant new templat
 
     app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
 
+#### List and Detail View
+
+You can specify your own list view template to use instead of the default. The base-ui module looks for a template matching the following 
+pattern: `view-<model>-list` and `view-<model>-detail`.
+
+Each template will be passed either a model instance (for detail view) or an array of models (for list view), using the model name.
+
+So using the examples above:
+
+    app.get('templater').template('view-user-list', 'ejs', () => {
+      return "<% users.forEach(function(user){ .... }) %>"
+    })
+
+    app.get('templater').template('view-user-detail', 'ejs', () => {
+      return "<%= user.email %>"
+    })
+
 ### API
 
 * * *
