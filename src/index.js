@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-03-05
+* @Last Modified 2016-04-04
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -129,7 +129,7 @@ export default class BaseUI {
    * @param  {string|class} model Can either be a model name, a path to a file or an ViewBase Subclass.
    * @param  {Object} opts  An options hash, wich is used to configure the UI.
    */
-  viewModel(model, opts) {
+  viewModel(model, opts = {}) {
     var viewModel;
     if(_.isString(model) && model.indexOf(path.sep) == -1) {
       this.app.log.debug('Loading view model', model)
@@ -175,7 +175,7 @@ export default class BaseUI {
     app.once('launch', () => {
       app.get('router').getExpressApp().then((expressApp) => {
         expressApp.use(function notFoundHandler(req, res, next) {
-          app.get('templater').render('404', {req, user: req.user}).then((body) => {
+          app.get('templater').render('404', {opts: app.config, req, user: req.user}).then((body) => {
             res.status(404).send(body)
             next()
           })
@@ -184,14 +184,14 @@ export default class BaseUI {
     })
 
     app.get('router').route("GET", '/error', (req, res) => {
-      return this.app.get('templater').render('500', {req, user: req.user}).then(res.send.bind(res))
+      return this.app.get('templater').render('500', {opts: this.app.config, req, user: req.user}).then(res.send.bind(res))
     })
   }
 
   _setupHomePageDefault() {
     this.app.get('router').default().route('GET', '/', (req, res) => {
       let content = "<h1>Welcome to Nxus!</h1>"
-      return this.app.get('templater').render('default', { req: req, user: req.user, content}).then(res.send.bind(res));
+      return this.app.get('templater').render('default', { opts: this.app.config, req, user: req.user, content}).then(res.send.bind(res));
     })
   }
 } 
