@@ -33,8 +33,11 @@ export default class ViewBase extends HasModels {
     if(this.templateDir())
       this.templater.templateDir('ejs', this.templateDir(), this.templatePrefix())
 
-    this.router.route('get', this.base(), this.list.bind(this))
-    this.router.route('get', this.base()+'/:id', this.detail.bind(this))
+    if(typeof opts.list == 'undefined' || opts.list === false)
+      this.router.route('get', this.base(), this.list.bind(this))
+
+    if(typeof opts.detail == 'undefined' || opts.detail === false)
+      this.router.route('get', this.base()+'/:'+this.idField(), this.detail.bind(this))
 
     this.templater.provideBefore('template', this.templatePrefix()+'-list', 'ejs', __dirname+"/../views/list.ejs")
     this.templater.provideBefore('template', this.templatePrefix()+'-detail', 'ejs', __dirname+"/../views/detail.ejs")
@@ -46,6 +49,14 @@ export default class ViewBase extends HasModels {
    */
   ignore() {
     return this.opts.ignore || ['id', 'createdAt', 'updatedAt']
+  }
+  
+  /**
+   * The ID field to use to display a single itme
+   * @return {array}
+   */
+  idField() {
+    return this.opts.idField || 'id'
   }
   
   /**
@@ -62,6 +73,22 @@ export default class ViewBase extends HasModels {
    */
   titleField() {
     return this.opts.titleField || 'name'
+  }
+
+  /**
+   * Fields in the model to use for sorting the list
+   * @return {string}
+   */
+  sortField() {
+    return this.opts.sortField || 'updatedAt'
+  }
+
+  /**
+   * List sort direction
+   * @return {string}
+   */
+  sortDirection() {
+    return this.opts.sortDirection || 'ASC'
   }
 
   /**
@@ -84,6 +111,22 @@ export default class ViewBase extends HasModels {
    * The prefix to use for the templates. Defaults to `view-<model>-`
    * @return {string}
    */
+  listTemplate() {
+    return this.opts.listTemplate || "page"
+  }
+
+  /**
+   * The prefix to use for the templates. Defaults to `view-<model>-`
+   * @return {string}
+   */
+  detailTemplate() {
+    return this.opts.detailTemplate || "page"
+  }
+
+  /**
+   * The prefix to use for the templates. Defaults to `view-<model>-`
+   * @return {string}
+   */
   templatePrefix() {
     return this.opts.templatePrefix || "view-"+morph.toDashed(this.model())
   }
@@ -94,6 +137,14 @@ export default class ViewBase extends HasModels {
    */
   displayName() {
     return this.opts.displayName || morph.toTitle(this.model())
+  }
+
+  /**
+   * The number of results to display per page
+   * @return {string} Defaults to `<model>`
+   */
+  itemsPerPage() {
+    return this.opts.itemsPerPage || 10
   }
 
   /**
@@ -120,29 +171,41 @@ export default class ViewBase extends HasModels {
   }
   
   list (req, res, opts = {}) {
-    let find = this.models[this.model()].find().where({})
+    let sort = this.sortField()+" "+this.sortDirection()
+    let page = parseInt(req.param('page')) || 1
+    console.log(this.opts)
+    let find = this.models[this.model()].find().where({}).sort(sort).limit(this.itemsPerPage()).skip((page-1)*this.itemsPerPage())
     if (this.modelPopulate && this.modelPopulate().length > 0) {
       find = find.populate(...this.modelPopulate())
     }
-    return find.then((insts) => {
+    let count = this.models[this.model()].count().where({})
+    return count.then((count) => {
+      return [count, find]
+    }).spread((total, insts) => {
       opts = _.extend({
         req,
+        total,
+        page,
+        itemsPerPage: this.itemsPerPage(),
         base: this.base(),
         user: req.user,
         title: 'All '+ pluralize(this.displayName()),
         instanceTitleField: this.titleField(),
         insts,
+        idField: this.idField(),
         name: this.displayName(),
         attributes: this._getAttrs(this.models[this.model()])
       }, opts)
       if(!opts[pluralize(this.model())]) opts[pluralize(this.model())] = insts
       else opts.insts = opts[pluralize(this.model())]
-      return this.templater.renderPartial(this.templatePrefix()+'-list', 'page', opts).then(res.send.bind(res));
+      return this.templater.renderPartial(this.templatePrefix()+'-list', this.listTemplate(), opts).then(res.send.bind(res));
     }).catch((e) => {console.log('caught', e)})
   }
 
   detail (req, res, opts = {}) {
-    let find = this.models[this.model()].findOne().where(req.params.id)
+    let query = {}
+    query[this.idField()] = req.params[this.idField()]
+    let find = this.models[this.model()].findOne().where(query)
     if (this.modelPopulate && this.modelPopulate().length > 0) {
       find = find.populate(...this.modelPopulate())
     }
@@ -154,12 +217,13 @@ export default class ViewBase extends HasModels {
         user: req.user,
         title: inst[this.titleField()],
         inst,
+        itemsPerPage: this.itemsPerPage(),
         name: this.displayName(),
         attributes: this._getAttrs(this.models[this.model()])
       }, opts)
       if(!opts[this.model()]) opts[this.model()] = inst;
       else opts.inst = opts[this.model()]
-      return this.templater.renderPartial(this.templatePrefix()+'-detail', 'page', opts).then(res.send.bind(res));
+      return this.templater.renderPartial(this.templatePrefix()+'-detail', this.detailTemplate(), opts).then(res.send.bind(res));
     })
   }
 
