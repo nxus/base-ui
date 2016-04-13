@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-04-04
+* @Last Modified 2016-04-10
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -102,6 +102,12 @@ export default class BaseUI {
 
     this._setupErrorRoutes()
     this._setupHomePageDefault()
+
+    this._setupTemplates()
+  }
+
+  _setupTemplates() {
+    this.app.get('templater').template('paginator', 'ejs', __dirname+"/../views/paginator.ejs")
   }
 
   /**

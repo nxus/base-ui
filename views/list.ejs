@@ -11,7 +11,7 @@
         <tr>
           <% attributes.forEach(function(attr) { %>
             <% if(attr.name == instanceTitleField) { %>
-              <td><a href="<%=base%>/<%=u.id%>"><%=u[attr.name]%></a></td>
+              <td><a href="<%=base%>/<%=u[idField]%>"><%=u[attr.name]%></a></td>
             <% } else if (attr.type == 'password') { %> <% return %>
             <% } else if (attr.type == 'boolean') { %>
             <td><%- u[attr.name] ? '<i class="fa fa-check"></i>' : '' %></td>
@@ -21,7 +21,12 @@
           <% }) %>
         </tr>
       <% }) %>
-        
-    </tbody>
+    </tbody>   
 </table>
-
+<% if(pages.length > 1) { %> 
+<div class="row">
+  <div class="col-md-12 text-center">
+    <%- render('paginator') %>
+  </div>
+</div>
+<% } %>
