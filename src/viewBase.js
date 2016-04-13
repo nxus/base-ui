@@ -108,7 +108,7 @@ export default class ViewBase extends HasModels {
   }
 
   /**
-   * The prefix to use for the templates. Defaults to `view-<model>-`
+   * The template to use for the list partial. Defaults to 'page'. 
    * @return {string}
    */
   listTemplate() {
@@ -116,7 +116,7 @@ export default class ViewBase extends HasModels {
   }
 
   /**
-   * The prefix to use for the templates. Defaults to `view-<model>-`
+   * The template to use to display the detail partial. Defaults to 'page'.
    * @return {string}
    */
   detailTemplate() {
@@ -173,7 +173,6 @@ export default class ViewBase extends HasModels {
   list (req, res, opts = {}) {
     let sort = this.sortField()+" "+this.sortDirection()
     let page = parseInt(req.param('page')) || 1
-    console.log(this.opts)
     let find = this.models[this.model()].find().where({}).sort(sort).limit(this.itemsPerPage()).skip((page-1)*this.itemsPerPage())
     if (this.modelPopulate && this.modelPopulate().length > 0) {
       find = find.populate(...this.modelPopulate())
