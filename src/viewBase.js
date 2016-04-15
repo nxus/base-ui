@@ -31,7 +31,7 @@ export default class ViewBase extends HasModels {
     this.templater = app.get('templater')
 
     if(this.templateDir())
-      this.templater.templateDir('ejs', this.templateDir(), this.templatePrefix())
+      this.templater.templateDir(this.templateDir())
 
     if(typeof opts.list == 'undefined' || opts.list === false)
       this.router.route('get', this.base(), this.list.bind(this))
@@ -39,8 +39,13 @@ export default class ViewBase extends HasModels {
     if(typeof opts.detail == 'undefined' || opts.detail === false)
       this.router.route('get', this.base()+'/:'+this.idField(), this.detail.bind(this))
 
-    this.templater.provideBefore('template', this.templatePrefix()+'-list', 'ejs', __dirname+"/../views/list.ejs")
-    this.templater.provideBefore('template', this.templatePrefix()+'-detail', 'ejs', __dirname+"/../views/detail.ejs")
+    this.templater.default('templateFunction', this.templatePrefix()+'-list', this.listTemplate(), (opts, name) => {
+      return this.templater.render("base-ui-list", opts)
+    })
+
+    this.templater.default('templateFunction', this.templatePrefix()+'-detail', this.detailTemplate(), (opts, name) => {
+      return this.templater.render("base-ui-detail", opts)
+    })  
   }
 
   /**
@@ -197,7 +202,7 @@ export default class ViewBase extends HasModels {
       }, opts)
       if(!opts[pluralize(this.model())]) opts[pluralize(this.model())] = insts
       else opts.insts = opts[pluralize(this.model())]
-      return this.templater.renderPartial(this.templatePrefix()+'-list', this.listTemplate(), opts).then(res.send.bind(res));
+      return this.templater.render(this.templatePrefix()+'-list', opts).then(res.send.bind(res));
     }).catch((e) => {console.log('caught', e)})
   }
 
@@ -222,7 +227,7 @@ export default class ViewBase extends HasModels {
       }, opts)
       if(!opts[this.model()]) opts[this.model()] = inst;
       else opts.inst = opts[this.model()]
-      return this.templater.renderPartial(this.templatePrefix()+'-detail', this.detailTemplate(), opts).then(res.send.bind(res));
+      return this.templater.render(this.templatePrefix()+'-detail', opts).then(res.send.bind(res));
     })
   }
 

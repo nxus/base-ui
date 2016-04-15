@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-04-10
+* @Last Modified 2016-04-15
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -49,11 +49,11 @@
  * 
  * ### 404 Page Template
  * 
- *     app.get('templater').template('404', 'ejs', 'path/to/my/404template.ejs')
+ *     app.get('templater').template('path/to/my/404.ejs')
  * 
  * ### 500 Page Template
  * 
- *     app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
+ *     app.get('templater').template('path/to/my/500.ejs')
  * 
  * ### List and Detail View
  *
@@ -65,12 +65,12 @@
  * So using the examples above:
  *
  * ```
- * app.get('templater').template('view-user-list', 'ejs', () => {
- *   return "<% users.forEach(function(user){ .... }) %>"
+ * app.get('templater').template('view-user-list', (opts) => {
+ *   return app.get('renderer').render("<% users.forEach(function(user){ .... }) %>", opts)
  * })
  * 
- * app.get('templater').template('view-user-detail', 'ejs', () => {
- *   return "<%= user.email %>"
+ * app.get('templater').template('view-user-detail', (opts) => {
+ *   return app.get('renderer').render("<%= user.email %>", opts)
  * })
  * ```
  * 
@@ -107,7 +107,7 @@ export default class BaseUI {
   }
 
   _setupTemplates() {
-    this.app.get('templater').template('paginator', 'ejs', __dirname+"/../views/paginator.ejs")
+    this.app.get('templater').templateDir(__dirname+"/../views")
   }
 
   /**
