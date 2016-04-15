@@ -47,11 +47,11 @@ If you want to provide your own 404 or 500 page, define the relevant new templat
 
 #### 404 Page Template
 
-    app.get('templater').template('404', 'ejs', 'path/to/my/404template.ejs')
+    app.get('templater').template('path/to/my/404.ejs')
 
 #### 500 Page Template
 
-    app.get('templater').template('500', 'ejs', 'path/to/my/500template.ejs')
+    app.get('templater').template('path/to/my/500.ejs')
 
 #### List and Detail View
 
@@ -62,12 +62,12 @@ Each template will be passed either a model instance (for detail view) or an arr
 
 So using the examples above:
 
-    app.get('templater').template('view-user-list', 'ejs', () => {
-      return "<% users.forEach(function(user){ .... }) %>"
+    app.get('templater').template('view-user-list', (opts) => {
+      return app.get('renderer').render("<% users.forEach(function(user){ .... }) %>", opts)
     })
 
-    app.get('templater').template('view-user-detail', 'ejs', () => {
-      return "<%= user.email %>"
+    app.get('templater').template('view-user-detail', (opts) => {
+      return app.get('renderer').render("<%= user.email %>", opts)
     })
 
 ### API
@@ -100,6 +100,12 @@ The base url for the UI pages.
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Defaults to `/<models>`
 
+### detailTemplate
+
+The template to use to display the detail partial. Defaults to 'page'.
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
 ### display
 
 Fields in the model to show
@@ -112,11 +118,29 @@ The display name for the model to use in the  UI
 
 Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Defaults to `<model>`
 
+### idField
+
+The ID field to use to display a single itme
+
+Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
 ### ignore
 
 Fields in the model to ignore in the UI
 
 Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
+### itemsPerPage
+
+The number of results to display per page
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Defaults to `<model>`
+
+### listTemplate
+
+The template to use for the list partial. Defaults to 'page'.
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 ### model
 
@@ -129,6 +153,18 @@ Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 Define any populated relationships for the model
 
 Returns **[array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** 
+
+### sortDirection
+
+List sort direction
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+### sortField
+
+Fields in the model to use for sorting the list
+
+Returns **[string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 
 ### templateDir
 
