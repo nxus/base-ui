@@ -1,14 +1,14 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-09 10:24:46
-* @Last Modified 2016-02-09 @Last Modified time: 2016-02-09 10:24:46
+* @Last Modified 2016-05-20
 */
 
 'use strict';
 
 import BaseUI from '../src/'
 
-import TestApp from '@nxus/core/lib/test/support/TestApp';
+import TestApp from 'nxus-core/lib/test/support/TestApp';
 
 describe("BaseUI", () => {
   var baseui;

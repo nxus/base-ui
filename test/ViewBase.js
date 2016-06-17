@@ -2,7 +2,7 @@
 
 import ViewBase from '../src/viewBase'
 
-import TestApp from '@nxus/core/lib/test/support/TestApp';
+import TestApp from 'nxus-core/lib/test/support/TestApp';
 
 class TestView extends ViewBase {
   base () {

@@ -1,4 +1,4 @@
-# @nxus/base-ui
+# nxus-base-ui
 
 ## 
 
@@ -8,7 +8,7 @@ Base UI pages including 404 and error page handlers.
 
 ### Installation
 
-    > npm install @nxus/base-ui --save
+    > npm install nxus-base-ui --save
 
 ### Usage
 

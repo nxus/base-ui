@@ -1,7 +1,7 @@
 /* 
 * @Author: Mike Reich
 * @Date:   2016-02-05 07:45:34
-* @Last Modified 2016-04-15
+* @Last Modified 2016-05-20
 */
 /** 
  * [![Build Status](https://travis-ci.org/nxus/base-ui.svg?branch=master)](https://travis-ci.org/nxus/base-ui)
@@ -10,7 +10,7 @@
  * 
  * ## Installation
  * 
- *     > npm install @nxus/base-ui --save
+ *     > npm install nxus-base-ui --save
  * 
  * ## Usage
  * 

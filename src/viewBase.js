@@ -1,6 +1,6 @@
 'use strict';
 
-import {HasModels} from '@nxus/storage'
+import {HasModels} from 'nxus-storage'
 import pluralize from 'pluralize'
 import _ from 'underscore'
 import morph from 'morph'
