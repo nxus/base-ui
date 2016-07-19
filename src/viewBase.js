@@ -250,7 +250,8 @@ export default class ViewBase extends HasModels {
   }
 
   _populate(find) {
-    this.modelPopulate().forEach((attr) => { find = find.populate(attr) })
+    let populate = this.modelPopulate()
+    if (populate.length > 0) find = find.populate(populate)
     return find
   }
 

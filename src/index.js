@@ -65,11 +65,11 @@
  * So using the examples above:
  *
  * ```
- * app.get('templater').replace().templateFunction('view-user-list', (opts) => {
+ * app.get('templater').templateFunction('view-user-list', (opts) => {
  *   return app.get('renderer').render("<% users.forEach(function(user){ .... }) %>", opts)
  * })
  * 
- * app.get('templater').replace().templateFunction('view-user-detail', (opts) => {
+ * app.get('templater').templateFunction('view-user-detail', (opts) => {
  *   return app.get('renderer').render("<%= user.email %>", opts)
  * })
  * ```
