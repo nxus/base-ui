@@ -37,7 +37,7 @@
     "nxus-renderer": "^3.0.0-0",
     "nxus-templater": "^3.0.0-0",
     "nxus-router": "^3.0.0-0",
-    "nxus-storage": "^3.0.0-0"
+    "nxus-storage": "^3.0.0-1"
   },
   "devDependencies": {
     "mocha": "^2.2.5",
