@@ -65,11 +65,11 @@
  * So using the examples above:
  *
  * ```
- * app.get('templater').template('view-user-list', (opts) => {
+ * app.get('templater').templateFunction('view-user-list', (opts) => {
  *   return app.get('renderer').render("<% users.forEach(function(user){ .... }) %>", opts)
  * })
  * 
- * app.get('templater').template('view-user-detail', (opts) => {
+ * app.get('templater').templateFunction('view-user-detail', (opts) => {
  *   return app.get('renderer').render("<%= user.email %>", opts)
  * })
  * ```
@@ -84,6 +84,7 @@
 import ViewBaseClass from './viewBase'
 import _ from 'underscore'
 import path from 'path'
+import fs from 'fs'
 
 export var ViewBase = ViewBaseClass
 
@@ -141,20 +142,17 @@ export default class BaseUI {
       this.app.log.debug('Loading view model', model)
       opts.model = model
       viewModel = new ViewBase(this.app, opts)
-      console.log('viewmodel name', viewModel.model())
       this.models[model] = viewModel
     } else if(_.isString(model) && model.indexOf(path.sep) > -1) {
       if(fs.existsSync(model)) {
         this.app.log.debug('Loading view model file at', model)
         model = require(model);
         viewModel = new model(this.app);
-        console.log('viewmodel name', viewModel.model())
         this.models[viewModel.model()] = viewModel
       } else
         throw new Error('Class path '+model+' is not a valid file')
     } else if(_.isFunction(model)) {
       viewModel = new model(this.app)
-      console.log('viewmodel name', viewModel.model())
       this.models[viewModel.model()] = viewModel
     }
   }
