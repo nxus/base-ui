@@ -57,8 +57,8 @@ export default class ViewBase extends HasModels {
   }
   
   /**
-   * The ID field to use to display a single itme
-   * @return {array}
+   * The ID field to use to display a single item
+   * @return {string}
    */
   idField() {
     return this.opts.idField || 'id'
@@ -73,7 +73,7 @@ export default class ViewBase extends HasModels {
   }
 
   /**
-   * Fields in the model to use for the instance title
+   * Field in the model to use for the instance title
    * @return {string}
    */
   titleField() {
@@ -81,7 +81,7 @@ export default class ViewBase extends HasModels {
   }
 
   /**
-   * Fields in the model to use for sorting the list
+   * Field in the model to use for sorting the list
    * @return {string}
    */
   sortField() {
@@ -90,7 +90,7 @@ export default class ViewBase extends HasModels {
 
   /**
    * List sort direction
-   * @return {string}
+   * @return {string} `ASC` for ascending, `DESC` for descending order
    */
   sortDirection() {
     return this.opts.sortDirection || 'ASC'
@@ -129,7 +129,8 @@ export default class ViewBase extends HasModels {
   }
 
   /**
-   * The prefix to use for the templates. Defaults to `view-<model>-`
+   * The prefix to use for the templates. Defaults to `view-<model>-`,
+   * where `<model>` is the model name morphed into dashed format.
    * @return {string}
    */
   templatePrefix() {
@@ -138,7 +139,7 @@ export default class ViewBase extends HasModels {
 
   /**
    * The display name for the model to use in the  UI
-   * @return {string} Defaults to `<model>`
+   * @return {string} Defaults to `<model>`, the model name morphed into title-case format.
    */
   displayName() {
     return this.opts.displayName || morph.toTitle(this.model())
@@ -178,10 +179,9 @@ export default class ViewBase extends HasModels {
   list (req, res, opts = {}) {
     let sort = this.sortField()+" "+this.sortDirection()
     let page = parseInt(req.param('page')) || 1
-    let find = this.models[this.model()].find().where({}).sort(sort).limit(this.itemsPerPage()).skip((page-1)*this.itemsPerPage())
-    if (this.modelPopulate && this.modelPopulate().length > 0) {
-      find = find.populate(...this.modelPopulate())
-    }
+    let find = this.models[this.model()].find().where({}).sort(sort)
+      .limit(this.itemsPerPage()).skip((page-1)*this.itemsPerPage())
+    find = this._populate(find)
     let count = this.models[this.model()].count().where({})
     return count.then((count) => {
       return [count, find]
@@ -210,9 +210,7 @@ export default class ViewBase extends HasModels {
     let query = {}
     query[this.idField()] = req.params[this.idField()]
     let find = this.models[this.model()].findOne().where(query)
-    if (this.modelPopulate && this.modelPopulate().length > 0) {
-      find = find.populate(...this.modelPopulate())
-    }
+    find = this._populate(find)
     return find.then((inst) => {
       if(!inst) return res.status(404).send()
       opts = _.extend({
@@ -249,6 +247,12 @@ export default class ViewBase extends HasModels {
       if(!ret) ret = _(ignoreType).contains(k.type)
       return !ret
     })
+  }
+
+  _populate(find) {
+    let populate = this.modelPopulate()
+    if (populate.length > 0) find = find.populate(populate)
+    return find
   }
 
   _sanitizeName(string) {
